@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +61,6 @@ public abstract class ViewPagerLayoutManager extends LinearLayoutManager {
      * Many calculations are made depending on orientation. To keep it clean, this interface
      * helps {@link LinearLayoutManager} make those decisions.
      * Based on {@link #mOrientation}, an implementation is lazily created in
-     * {@link #ensureLayoutState} method.
      */
     protected OrientationHelper mOrientationHelper;
 
@@ -124,6 +124,10 @@ public abstract class ViewPagerLayoutManager extends LinearLayoutManager {
     protected abstract float setInterval();
 
     protected abstract void setItemViewProperty(View itemView, float targetOffset);
+
+    protected void setItemViewProperty(View itemView, float targetOffset, int left) {
+
+    }
 
     /**
      * cause elevation is not support below api 21,
@@ -385,7 +389,7 @@ public abstract class ViewPagerLayoutManager extends LinearLayoutManager {
         measureChildWithMargins(scrap, 0, 0);
         mDecoratedMeasurement = mOrientationHelper.getDecoratedMeasurement(scrap);
         mDecoratedMeasurementInOther = mOrientationHelper.getDecoratedMeasurementInOther(scrap);
-        mSpaceMain = (mOrientationHelper.getTotalSpace() - mDecoratedMeasurement) / 2;
+        mSpaceMain = 80;
         if (mDistanceToBottom == INVALID_SIZE) {
             mSpaceInOther = (mOrientationHelper.getTotalSpaceInOther() - mDecoratedMeasurementInOther) / 2;
         } else {
@@ -716,16 +720,35 @@ public abstract class ViewPagerLayoutManager extends LinearLayoutManager {
     }
 
     private void layoutScrap(View scrap, float targetOffset) {
-        final int left = calItemLeft(scrap, targetOffset);
+
+        int right = 0;
+        int left = calItemLeft(scrap, targetOffset);
         final int top = calItemTop(scrap, targetOffset);
+
+
+        Log.i("TAG", "layoutScrap: +++++++++" + scrap.hashCode() + "+++++" + mSpaceMain + "+++++++++" + left);
+
         if (mOrientation == VERTICAL) {
             layoutDecorated(scrap, mSpaceInOther + left, mSpaceMain + top,
                     mSpaceInOther + left + mDecoratedMeasurementInOther, mSpaceMain + top + mDecoratedMeasurement);
         } else {
+            right = (int) (mSpaceMain + mDecoratedMeasurement + left);
+
+            if (left <= 0 && mDecoratedMeasurement - targetOffset >  mSpaceMain){
+                left = 0;
+            } else if (left <= 0 && Math.abs(left) > mDecoratedMeasurement - mSpaceMain) {
+                left = 0;
+            }else{
+                Log.i("TAG", "layoutScrap1111: +++++++++" + scrap.hashCode() + "+++++" + mSpaceMain + "+++++++++" + left);
+            }
             layoutDecorated(scrap, mSpaceMain + left, mSpaceInOther + top,
-                    mSpaceMain + left + mDecoratedMeasurement, mSpaceInOther + top + mDecoratedMeasurementInOther);
+                    right, mSpaceInOther + top + mDecoratedMeasurementInOther);
         }
+
+
         setItemViewProperty(scrap, targetOffset);
+        setItemViewProperty(scrap, targetOffset, left);
+
     }
 
     protected int calItemLeft(View itemView, float targetOffset) {

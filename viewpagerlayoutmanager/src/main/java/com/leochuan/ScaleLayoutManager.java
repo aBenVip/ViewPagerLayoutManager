@@ -1,7 +1,9 @@
 package com.leochuan;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 
 /**
  * An implementation of {@link ViewPagerLayoutManager}
@@ -111,12 +113,32 @@ public class ScaleLayoutManager extends ViewPagerLayoutManager {
 
     @Override
     protected void setItemViewProperty(View itemView, float targetOffset) {
+
+    }
+
+    @Override
+    protected void setItemViewProperty(View itemView, float targetOffset , int left) {
+        Log.i("TAG", "setItemViewProperty: ++++++++"+itemView.hashCode()+"++++++++"+targetOffset);
         float scale = calculateScale(targetOffset + mSpaceMain);
-        itemView.setScaleX(scale);
-        itemView.setScaleY(scale);
+
+        Log.i("TAG", "width: ++++++++"+itemView.getWidth());
+        ViewGroup.LayoutParams layoutParams = itemView.getLayoutParams();
+//        if (targetOffset < 0){
+//            mDecoratedMeasurement = (int) (800*scale);
+//        }else{
+//            mDecoratedMeasurement = (int) (800*scale);
+//        }
+//
+
+        Log.i("TAG", "scale: ++++++++"+itemView.hashCode()+"++++++++"+"+++++++"+scale+"+++++"+mDecoratedMeasurement);
+//        layoutParams.width = (int) (800*scale);
+//        itemView.setScaleX(scale);
+//        itemView.setScaleY(scale);
         final float alpha = calAlpha(targetOffset);
         itemView.setAlpha(alpha);
     }
+
+
 
     private float calAlpha(float targetOffset) {
         final float offset = Math.abs(targetOffset);
@@ -142,7 +164,7 @@ public class ScaleLayoutManager extends ViewPagerLayoutManager {
     }
 
     public static class Builder {
-        private static final float SCALE_RATE = 0.8f;
+        private static final float SCALE_RATE = 0.2f;
         private static final float DEFAULT_SPEED = 1f;
         private static float MIN_ALPHA = 1f;
         private static float MAX_ALPHA = 1f;
