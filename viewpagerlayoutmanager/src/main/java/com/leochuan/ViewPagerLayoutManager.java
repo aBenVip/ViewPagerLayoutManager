@@ -728,8 +728,8 @@ public abstract class ViewPagerLayoutManager extends LinearLayoutManager {
 
             final float offset = Math.abs(targetOffset);
 
-            float alpha = (0.2f - 1f) / mInterval * offset + 1f;
-            if (offset >= mInterval) alpha = 0.2f;
+            float alpha = (0.4f - 1f) / mInterval * offset + 1f;
+            if (offset >= mInterval) alpha = 0.4f;
 
 //            float centerY = mDecoratedMeasurement / 2f;
 
@@ -752,7 +752,24 @@ public abstract class ViewPagerLayoutManager extends LinearLayoutManager {
 
 //                viewById.setTranslationX(-mDecoratedMeasurement*(1-alpha));
 
-//                viewById.setTranslationX(-centerX * (1 - alpha));
+                final float offset1 = Math.abs(targetOffset);
+
+                float alpha1 = (- 1f) / mInterval * offset1 + 1f;
+                if (offset1 >= mInterval) alpha1 = 0f;
+
+
+
+
+                Log.i("TAG", "layoutScrap: +++++++" + scrap.hashCode() +"+++"+targetOffset);
+
+
+                float a = (int) Math.abs(-((mDecoratedMeasurement-(mDecoratedMeasurement/8f)) * (1 - alpha) ))/2f;
+                if (targetOffset<0){
+                    viewById.setTranslationX(a);
+                }else {
+                    viewById.setTranslationX(-a);
+                }
+
 
 
 //                viewById.setTranslationX();
@@ -773,12 +790,12 @@ public abstract class ViewPagerLayoutManager extends LinearLayoutManager {
 //            711712573   503499264    223672799
 //             0 _ -320        -320_ 0        -320_
 
-            float a = (int) Math.abs(-(mDecoratedMeasurement * (1 - alpha) ));
+//
 
-            Log.i("TAG", "layoutScrap: +++++++" + scrap.hashCode() + "++++++" + a);
 
-//            layoutDecorated(scrap, (int) (mSpaceMain + left + centerX - (a * (1 - alpha))), mSpaceInOther + top,
-//                    (int) (mSpaceMain + left + mDecoratedMeasurement - centerX + (a * (1 - alpha))), mSpaceInOther + top + mDecoratedMeasurementInOther);
+//
+//            layoutDecorated(scrap, (int) (mSpaceMain + left), mSpaceInOther + top,
+//                    (int) (mSpaceMain + left + mDecoratedMeasurement * alpha ), mSpaceInOther + top + mDecoratedMeasurementInOther);
 
 
             layoutDecorated(scrap, (int) (mSpaceMain + left + centerX), mSpaceInOther + top,
