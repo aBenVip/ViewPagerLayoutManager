@@ -780,6 +780,10 @@ public abstract class ViewPagerLayoutManager extends LinearLayoutManager {
 //            layoutDecorated(scrap, (int) (mSpaceMain + left + centerX - (a * (1 - alpha))), mSpaceInOther + top,
 //                    (int) (mSpaceMain + left + mDecoratedMeasurement - centerX + (a * (1 - alpha))), mSpaceInOther + top + mDecoratedMeasurementInOther);
 
+
+            layoutDecorated(scrap, (int) (mSpaceMain + left + centerX), mSpaceInOther + top,
+                    (int) (mSpaceMain + left + mDecoratedMeasurement - centerX), mSpaceInOther + top + mDecoratedMeasurementInOther);
+
         }
         setItemViewProperty(scrap, targetOffset);
     }
