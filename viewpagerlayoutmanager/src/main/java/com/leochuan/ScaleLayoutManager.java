@@ -1,7 +1,9 @@
 package com.leochuan;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 
 /**
  * An implementation of {@link ViewPagerLayoutManager}
@@ -111,11 +113,50 @@ public class ScaleLayoutManager extends ViewPagerLayoutManager {
 
     @Override
     protected void setItemViewProperty(View itemView, float targetOffset) {
-        float scale = calculateScale(targetOffset + mSpaceMain);
-        itemView.setScaleX(scale);
-        itemView.setScaleY(scale);
-        final float alpha = calAlpha(targetOffset);
-        itemView.setAlpha(alpha);
+
+//
+
+//
+//        float deltaX = Math.abs(targetOffset - mSpaceMain);
+//
+//        if (deltaX - mDecoratedMeasurement > 0) deltaX = mDecoratedMeasurement;
+////
+//        float a = (mDecoratedMeasurement - itemView.getWidth());
+//        float result = a / mDecoratedMeasurement;
+////
+//
+//        Log.i("TAG", "setItemViewProperty: ++++++" + itemView.hashCode() + "+++++" + (mDecoratedMeasurement - itemView.getWidth()) + "+++++" + deltaX);
+
+
+        final float offset = Math.abs(targetOffset);
+        float alpha = (0.2f - 1f) / mInterval * offset + 1f;
+        if (offset >= mInterval) alpha = 0.2f;
+
+//        float alpha = calAlpha(targetOffset);
+
+
+
+//        itemView.setTranslationX(deltaX);
+//
+//
+//
+
+//
+//
+//        layoutParams.width = (int) (mDecoratedMeasurement * (alpha));
+
+
+//        ViewGroup.LayoutParams layoutParams = itemView.getLayoutParams();
+//        layoutParams.width = (int) (mDecoratedMeasurement * (alpha));
+
+
+//        itemView.setScaleX(scale);
+//        itemView.setScaleY(scale);
+
+
+//
+
+//        itemView.setAlpha(alpha);
     }
 
     private float calAlpha(float targetOffset) {
@@ -125,6 +166,12 @@ public class ScaleLayoutManager extends ViewPagerLayoutManager {
         return alpha;
     }
 
+    private float calculateScale(float x) {
+        float deltaX = Math.abs(x - mSpaceMain);
+//        if (deltaX - mDecoratedMeasurement > 0) deltaX = mDecoratedMeasurement;
+        return 1f - deltaX / mDecoratedMeasurement * (1f - minScale);
+    }
+
     @Override
     protected float getDistanceRatio() {
         if (moveSpeed == 0) return Float.MAX_VALUE;
@@ -132,19 +179,14 @@ public class ScaleLayoutManager extends ViewPagerLayoutManager {
     }
 
     /**
-     * @param x start positon of the view you want scale
      * @return the scale rate of current scroll mOffset
      */
-    private float calculateScale(float x) {
-        float deltaX = Math.abs(x - mSpaceMain);
-        if (deltaX - mDecoratedMeasurement > 0) deltaX = mDecoratedMeasurement;
-        return 1f - deltaX / mDecoratedMeasurement * (1f - minScale);
-    }
+
 
     public static class Builder {
-        private static final float SCALE_RATE = 0.8f;
+        private static final float SCALE_RATE = 0.5f;
         private static final float DEFAULT_SPEED = 1f;
-        private static float MIN_ALPHA = 1f;
+        private static float MIN_ALPHA = 0.2f;
         private static float MAX_ALPHA = 1f;
 
         private int itemSpace;

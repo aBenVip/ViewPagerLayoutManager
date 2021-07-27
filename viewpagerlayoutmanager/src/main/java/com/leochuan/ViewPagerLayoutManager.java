@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +61,6 @@ public abstract class ViewPagerLayoutManager extends LinearLayoutManager {
      * Many calculations are made depending on orientation. To keep it clean, this interface
      * helps {@link LinearLayoutManager} make those decisions.
      * Based on {@link #mOrientation}, an implementation is lazily created in
-     * {@link #ensureLayoutState} method.
      */
     protected OrientationHelper mOrientationHelper;
 
@@ -386,6 +386,7 @@ public abstract class ViewPagerLayoutManager extends LinearLayoutManager {
         mDecoratedMeasurement = mOrientationHelper.getDecoratedMeasurement(scrap);
         mDecoratedMeasurementInOther = mOrientationHelper.getDecoratedMeasurementInOther(scrap);
         mSpaceMain = (mOrientationHelper.getTotalSpace() - mDecoratedMeasurement) / 2;
+//        mSpaceMain = 0;
         if (mDistanceToBottom == INVALID_SIZE) {
             mSpaceInOther = (mOrientationHelper.getTotalSpaceInOther() - mDecoratedMeasurementInOther) / 2;
         } else {
@@ -722,11 +723,75 @@ public abstract class ViewPagerLayoutManager extends LinearLayoutManager {
             layoutDecorated(scrap, mSpaceInOther + left, mSpaceMain + top,
                     mSpaceInOther + left + mDecoratedMeasurementInOther, mSpaceMain + top + mDecoratedMeasurement);
         } else {
-            layoutDecorated(scrap, mSpaceMain + left, mSpaceInOther + top,
-                    mSpaceMain + left + mDecoratedMeasurement, mSpaceInOther + top + mDecoratedMeasurementInOther);
+
+//            final float alpha = calAlpha(targetOffset);
+
+            final float offset = Math.abs(targetOffset);
+
+            float alpha = (0.2f - 1f) / mInterval * offset + 1f;
+            if (offset >= mInterval) alpha = 0.2f;
+
+//            float centerY = mDecoratedMeasurement / 2f;
+
+//            Log.i("TAG", "layoutScrap: ++++++" + scrap.hashCode() + "+++++" + centerY+"+++++++"+ (mSpaceMain + left));
+
+//            float leftOffset = (centerY +(mSpaceMain + left)) * (alpha);
+//            float rightOffset = 0;
+//            float rightOffset = ((mSpaceMain + left + mDecoratedMeasurement) - centerY) / (alpha);
+
+            View viewById = scrap.findViewById(R.id.card);
+            View viewById1 = scrap.findViewById(R.id.image);
+
+            //中轴线
+            float centerX = mDecoratedMeasurement * (1 - alpha) / 2f;
+
+
+            if (viewById != null) {
+//                ViewGroup.LayoutParams layoutParams = viewById.getLayoutParams();
+//                layoutParams.width = (int) (mDecoratedMeasurement * alpha);
+
+//                viewById.setTranslationX(-mDecoratedMeasurement*(1-alpha));
+
+//                viewById.setTranslationX(-centerX * (1 - alpha));
+
+
+//                viewById.setTranslationX();
+
+
+
+                ViewGroup.MarginLayoutParams layoutParams1 = (ViewGroup.MarginLayoutParams) viewById1.getLayoutParams();
+                layoutParams1.leftMargin = (int) -(mDecoratedMeasurement * (1 - alpha) / 2f);
+//                layoutParams1.width = (int) (mDecoratedMeasurement*(alpha));
+//                viewById1.setLayoutParams(layoutParams1);
+            }
+
+//            final float offset1 = Math.abs(targetOffset);
+//
+//            float alpha1 = (-1f) / mInterval * offset + 1f;
+//            if (offset >= mInterval) alpha1 = 0f;
+
+//            711712573   503499264    223672799
+//             0 _ -320        -320_ 0        -320_
+
+            float a = (int) Math.abs(-(mDecoratedMeasurement * (1 - alpha) ));
+
+            Log.i("TAG", "layoutScrap: +++++++" + scrap.hashCode() + "++++++" + a);
+
+//            layoutDecorated(scrap, (int) (mSpaceMain + left + centerX - (a * (1 - alpha))), mSpaceInOther + top,
+//                    (int) (mSpaceMain + left + mDecoratedMeasurement - centerX + (a * (1 - alpha))), mSpaceInOther + top + mDecoratedMeasurementInOther);
+
         }
         setItemViewProperty(scrap, targetOffset);
     }
+
+
+    private float calAlpha(float targetOffset) {
+        final float offset = Math.abs(targetOffset);
+        float alpha = (0.2f - 1f) / mInterval * offset + 1f;
+        if (offset >= mInterval) alpha = 0.2f;
+        return alpha;
+    }
+
 
     protected int calItemLeft(View itemView, float targetOffset) {
         return mOrientation == VERTICAL ? 0 : (int) targetOffset;
@@ -741,7 +806,7 @@ public abstract class ViewPagerLayoutManager extends LinearLayoutManager {
      * the view will be removed and recycled in {@link #layoutItems(RecyclerView.Recycler)}
      */
     protected float maxRemoveOffset() {
-        return mOrientationHelper.getTotalSpace() - mSpaceMain;
+        return mOrientationHelper.getTotalSpace() + mSpaceMain;
     }
 
     /**

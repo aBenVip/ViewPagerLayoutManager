@@ -9,11 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name="rouchuan.viewpagerlayoutmanager.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".circle.CircleLayoutActivity"
@@ -23,7 +19,13 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".scale.ScaleLayoutActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".gallery.GalleryLayoutActivity"
             android:parentActivityName=".MainActivity" />
