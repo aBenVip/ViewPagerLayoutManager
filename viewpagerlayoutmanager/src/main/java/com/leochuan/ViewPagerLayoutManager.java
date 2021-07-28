@@ -757,7 +757,7 @@ public abstract class ViewPagerLayoutManager extends LinearLayoutManager {
                 float alpha1 = (- 1f) / mInterval * offset1 + 1f;
                 if (offset1 >= mInterval) alpha1 = 0f;
 
-
+//                viewById.setTranslationX(0);
 
 
                 Log.i("TAG", "layoutScrap: +++++++" + scrap.hashCode() +"+++"+targetOffset);
@@ -777,7 +777,8 @@ public abstract class ViewPagerLayoutManager extends LinearLayoutManager {
 
 
                 ViewGroup.MarginLayoutParams layoutParams1 = (ViewGroup.MarginLayoutParams) viewById1.getLayoutParams();
-                layoutParams1.leftMargin = (int) -(mDecoratedMeasurement * (1 - alpha) / 2f);
+                viewById1.setTranslationX((int) -(mDecoratedMeasurement * (1 - alpha) / 2f));
+//                layoutParams1.leftMargin = ;
 //                layoutParams1.width = (int) (mDecoratedMeasurement*(alpha));
 //                viewById1.setLayoutParams(layoutParams1);
             }

@@ -11,6 +11,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.leochuan.CenterSnapHelper;
+import com.leochuan.PageSnapHelper;
 import com.leochuan.ScaleLayoutManager;
 import com.leochuan.ViewPagerLayoutManager;
 
@@ -148,10 +149,11 @@ public class ScalePopUpWindow extends SettingPopUpWindow
                         ViewPagerLayoutManager.VERTICAL : ViewPagerLayoutManager.HORIZONTAL);
                 break;
             case R.id.s_auto_center:
+                PageSnapHelper snapHelper = new PageSnapHelper();
                 if (isChecked) {
-                    centerSnapHelper.attachToRecyclerView(recyclerView);
+                    snapHelper.attachToRecyclerView(recyclerView);
                 } else {
-                    centerSnapHelper.attachToRecyclerView(null);
+                    snapHelper.attachToRecyclerView(null);
                 }
                 break;
             case R.id.s_reverse:

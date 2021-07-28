@@ -30,6 +30,12 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
     public void onBindViewHolder(DataAdapter.ViewHolder holder, int position) {
         holder.imageView.setImageResource(images[position]);
         holder.imageView.setTag(position);
+//        holder.imageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                notifyDataSetChanged();
+//            }
+//        });
     }
 
     @Override
